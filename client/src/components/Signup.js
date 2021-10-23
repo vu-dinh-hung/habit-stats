@@ -1,52 +1,112 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-export default class SignUp extends Component {
-  handleSubmit() {}
+export default function SignUp() {
+  const [state, setState] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  });
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit()}>
-        <h3>Sign Up</h3>
+  const handleFirstNameChange = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setState({ firstname: event.target.value });
+  };
 
-        <div className="form-group">
-          <label>First name</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="First name"
-          />
-        </div>
+  const handleLastNameChange = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setState({ lastname: event.target.value });
+  };
 
-        <div className="form-group">
-          <label>Last name</label>
-          <input type="text" className="form-control" placeholder="Last name" />
-        </div>
+  const handleEmailChange = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setState({
+      email: event.target.value,
+    });
+  };
 
-        <div className="form-group">
-          <label>Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            placeholder="Enter email"
-          />
-        </div>
+  const handlePasswordChange = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setState({
+      password: event.target.value,
+    });
+  };
 
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Enter password"
-          />
-        </div>
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const values = this.state;
 
-        <button type="submit" className="btn btn-primary btn-block">
-          Sign Up
-        </button>
-        <p className="forgot-password text-right">
-          Already registered <a href="#">sign in?</a>
-        </p>
-      </form>
-    );
-  }
+    try {
+      const response = await fetch("/register", {
+        method: "POST",
+        body: JSON.stringify(values),
+      });
+      if (response.status !== 200) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+    } catch (e) {
+      console.log(`Registration failed! ${e.message}`);
+    }
+  };
+
+  return (
+    <form onSubmit={this.handleSubmit()}>
+      <h3>Sign Up</h3>
+
+      <div className="form-group">
+        <label>First name</label>
+        <input
+          type="text"
+          className="form-control"
+          required
+          onChange={this.handleFirstNameChange}
+          placeholder="First name"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Last name</label>
+        <input
+          type="text"
+          className="form-control"
+          required
+          onChange={this.handleLastNameChange}
+          placeholder="Last name"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Email address</label>
+        <input
+          type="email"
+          className="form-control"
+          required
+          onChange={this.handleEmailChange}
+          placeholder="Enter email"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          className="form-control"
+          onChange={this.handlePasswordChange}
+          placeholder="Enter password"
+        />
+      </div>
+
+      <button type="submit" className="btn btn-primary btn-block">
+        Sign Up
+      </button>
+      <p className="forgot-password text-right">
+        Already registered <a href="#">sign in?</a>
+      </p>
+    </form>
+  );
 }
