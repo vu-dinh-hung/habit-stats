@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function SignUp() {
+export default function SignUp({ setAppState }) {
   const [state, setState] = useState({
     firstname: "",
     lastname: "",
@@ -39,23 +39,33 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const values = this.state;
 
     try {
       const response = await fetch("/register", {
         method: "POST",
-        body: JSON.stringify(values),
+        body: JSON.stringify(state),
       });
-      if (response.status !== 200) {
+      //DEV_CODE
+      setAppState({
+        token: 123,
+        user: {
+          firstname: "Elias",
+          lastname: "Neuman-Donihue",
+          email: "me@eliasnd.com",
+          password: "password",
+        },
+      });
+      /* if (response.status !== 200) {
         throw new Error(`Request failed: ${response.status}`);
       }
+      setAppState(response.json()); */
     } catch (e) {
       console.log(`Registration failed! ${e.message}`);
     }
   };
 
   return (
-    <form onSubmit={this.handleSubmit()}>
+    <form onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
 
       <div className="form-group">
@@ -64,7 +74,7 @@ export default function SignUp() {
           type="text"
           className="form-control"
           required
-          onChange={this.handleFirstNameChange}
+          onChange={handleFirstNameChange}
           placeholder="First name"
         />
       </div>
@@ -75,7 +85,7 @@ export default function SignUp() {
           type="text"
           className="form-control"
           required
-          onChange={this.handleLastNameChange}
+          onChange={handleLastNameChange}
           placeholder="Last name"
         />
       </div>
@@ -86,7 +96,7 @@ export default function SignUp() {
           type="email"
           className="form-control"
           required
-          onChange={this.handleEmailChange}
+          onChange={handleEmailChange}
           placeholder="Enter email"
         />
       </div>
@@ -96,7 +106,7 @@ export default function SignUp() {
         <input
           type="password"
           className="form-control"
-          onChange={this.handlePasswordChange}
+          onChange={handlePasswordChange}
           placeholder="Enter password"
         />
       </div>

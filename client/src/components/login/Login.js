@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Login() {
+export default function Login({ setAppState }) {
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -36,9 +36,20 @@ export default function Login() {
         method: "POST",
         body: JSON.stringify(state),
       });
-      if (response.status !== 200) {
+      //DEV_CODE
+      setAppState({
+        token: 123,
+        user: {
+          firstname: "Elias",
+          lastname: "Neuman-Donihue",
+          email: "me@eliasnd.com",
+          password: "password",
+        },
+      });
+      /* if (response.status !== 200) {
         throw new Error(`Request failed: ${response.status}`);
       }
+      setAppState(response.json()); */
     } catch (e) {
       console.log(`Login failed! ${e.message}`);
     }
